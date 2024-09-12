@@ -5,10 +5,10 @@ pipeline {
     stage('Build Artifact - Maven') {
       steps {
         sh "mvn clean package -DskipTests=true"
-        archiveArtifacts 'target/*.jar' // Fixed archiving artifacts syntax
+        archive 'target/*.jar' // Archiving the artifacts
       }
     }   
-    stage('Unit Tests - JUnit and JaCoCo') {
+    stage('Unit Tests - JUnit and Jacoco') {
       steps {
         sh "mvn test"
       }
