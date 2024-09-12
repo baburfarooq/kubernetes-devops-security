@@ -15,7 +15,8 @@ pipeline {
       post { 
         always {
           junit 'target/surefire-reports/*.xml'
-          archiveArtifacts 'target/site/jacoco/*.html' // Path to the JaCoCo reports
+          // Archive the JaCoCo report files
+          archiveArtifacts 'target/site/jacoco/*.html'
         }
       }
     }   
