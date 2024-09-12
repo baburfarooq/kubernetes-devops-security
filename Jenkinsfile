@@ -5,7 +5,7 @@ pipeline {
     stage('Build Artifact - Maven') {
       steps {
         sh "mvn clean package -DskipTests=true"
-        archiveArtifacts 'target/*.jar'
+        archive 'target/*.jar'
       }
     }   
     stage('Unit Tests - JUnit and JaCoCo') {
@@ -16,7 +16,7 @@ pipeline {
         always {
           junit 'target/surefire-reports/*.xml'
           // Archive the JaCoCo report files
-          archiveArtifacts 'target/site/jacoco/*.html'
+          jacoco execPattern: 'target/jacoco.exec'
         }
       }
     }   
