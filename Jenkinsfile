@@ -1,30 +1,23 @@
 pipeline {
-    agent any
+  agent any
 
-    stages {
-        stage('Build') {
-            steps {
-                // Your build steps here
-                sh 'mvn clean install'
-            }
-        }
-        stage('Test') {
-            steps {
-                // Running tests
-                sh 'mvn test'
-            }
-        }
-        stage('Code Coverage') {
-            steps {
-                // Using Jacoco to collect code coverage
-                jacoco(execPattern: '**/target/*.exec', classPattern: '**/target/classes', sourcePattern: '**/src/main/java', exclusionPattern: '**/target/test-classes')
-            }
-        }
-    }
-    post {
+  stages {
+    stage('Build Artifact - Maven') {
+      steps {
+        sh "mvn clean package -DskipTests=true"
+        archiveArtifacts 'target/*.jar' // Archiving the artifacts
+      }
+    }   
+    stage('Unit Tests - JUnit and Jacoco') {
+      steps {
+        sh "mvn test"
+      }
+      post {
         always {
-            // Publish Jacoco report
-            jacoco()
+          junit 'target/surefire-reports/*.xml'
+          jacoco execPattern: 'target/jacoco.exec'
         }
-    }
+      }
+    }   
+  }
 }
