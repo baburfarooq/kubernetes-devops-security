@@ -5,17 +5,21 @@ pipeline {
     stage('Build Artifact - Maven') {
       steps {
         sh "mvn clean package -DskipTests=true"
-        archive 'target/*.jar' // Archiving the artifacts
+        archiveArtifacts 'target/*.jar' // Fixed archiving artifacts syntax
       }
     }   
-    stage('Unit Tests - JUnit and Jacoco') {
+    stage('Unit Tests - JUnit and JaCoCo') {
       steps {
         sh "mvn test"
       }
       post { 
         always {
           junit 'target/surefire-reports/*.xml'
-          jacoco execPattern: 'target/jacoco.exec'
+          script {
+            def jacocoReport = new hudson.plugins.jacoco.JacocoPublisher()
+            jacocoReport.execPattern = 'target/jacoco.exec'
+            jacocoReport.record()
+          }
         }
       }
     }   
