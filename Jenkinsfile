@@ -30,5 +30,6 @@ pipeline {
         sh 'docker push baburfarooq82/numeric-app:"$GIT_COMMIT"'
         }
       }
+    }
   }
 }
