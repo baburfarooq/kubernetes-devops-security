@@ -35,7 +35,7 @@ pipeline {
 
     stage('SonarQube Analysis') {
       steps {
-          sh "mvn sonar:sonar -Dsonar.projectKey=numeric-application -Dsonar.projectName='numeric-application'"
+          sh "${mvnHome}/bin/mvn org.sonarsource.scanner.maven:sonar-maven-plugin:4.0.0.4121:sonar -Dsonar.projectKey=numeric-application -Dsonar.projectName='numeric-application'"
       } 
     }
 
