@@ -32,13 +32,18 @@ pipeline {
         }
     }
 }
-
+    node {
+      stage('SCM') {
+        checkout scm
+      }
     stage('SonarQube Analysis') {
       def mvn = tool 'Default Maven';
       withSonarQubeEnv() {
-        sh "${mvn}/bin/mvn clean verify sonar:sonar -Dsonar.projectKey=numeric-application -Dsonar.projectName='numeric-application'"
+        sh "${mvn}/bin/mvn clean verify sonar:sonar -Dsonar.projectKey=numeric-application -Dsonar.projectName='numeric-application'
+        -Dnosar.host.url=http://devsecops-demo.centralus.cloudapp.azure.com:9000/"
       }
     }
+  }
 
     stage('Docker Build and Push') {
       steps {
