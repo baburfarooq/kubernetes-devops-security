@@ -33,9 +33,9 @@ pipeline {
     }
 }
 
-        stage('SonarQube SAST') {
-            steps {
-                        sh "mvn sonar:sonar -Dsonar.projectKey=numeric-application -Dsonar.projectName='numeric-application' -Dsonar.host.url=http://devsecops-demo.centralus.cloudapp.azure.com:9000/api/project_badges/measure?project=numeric-application&metric=alert_status&token=sqb_52ac315d3cf70e2f4f4525bb67e7aca70474ed4d"
+    stage('SonarQube SAST') {
+      steps {
+              sh "mvn sonar:sonar -Dsonar.projectKey=numeric-application -Dsonar.host.url=http://devsecops-demo.centralus.cloudapp.azure.com:9000/api/project_badges/measure?project=numeric-application&metric=alert_status&token=sqb_52ac315d3cf70e2f4f4525bb67e7aca70474ed4d"
                     }
             }
 
