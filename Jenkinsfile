@@ -1,5 +1,10 @@
 pipeline {
   agent any
+  
+      tools {
+        jdk 'JDK 17' // Ensure this matches the name of your JDK installation in Jenkins
+    }
+    
 
   stages {
     stage('Build Artifact') {
