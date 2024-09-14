@@ -33,12 +33,17 @@ pipeline {
     }
 }
 
-    stage('SonarQube Analysis') {
-      def mvn = tool 'Default Maven';
-        withSonarQubeEnv() {
-          sh "${mvn}/bin/mvn clean verify sonar:sonar -Dsonar.projectKey=numeric-application -Dsonar.projectName='numeric-application'"
+       stage('SonarQube Analysis') {
+            steps {
+                script {
+                    def mvnHome = tool name: 'Default Maven', type: 'maven'
+                    withSonarQubeEnv('SonarQube') {
+                        sh "${mvnHome}/bin/mvn clean verify sonar:sonar -Dsonar.projectKey=numeric-application -Dsonar.projectName='numeric-application' -Dsonar.host.url=http://devsecops-demo.centralus.cloudapp.azure.com:9000/"
+                    }
+                }
+            }
         }
-      }
+
 
     stage('Docker Build and Push') {
       steps {
