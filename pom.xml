@@ -73,11 +73,37 @@
                     </outputFormats>
                 </configuration>
             </plugin>
-            <plugin>
-        <groupId>org.sonarsource.scanner.maven</groupId>
-        <artifactId>sonar-maven-plugin</artifactId>
-        <version>4.0.0.4121</version>
+            
+            <!-- Dependency Check Plugin -->
+        <plugin>
+            <groupId>org.owasp</groupId>
+            <artifactId>dependency-check-maven</artifactId>
+            <version>6.1.6</version>
+            <configuration>
+                <!-- Output format for the report -->
+                <format>ALL</format>
+                
+                <!-- Fail the build if any CVSS score is greater than or equal to 9 -->
+                <failBuildOnCVSS>9</failBuildOnCVSS>
+                
+                <!-- Use internal mirroring of CVE contents
+                Supporting files
+                E.g. a company-wide suppression file and local project file -->
+
+                <!--
+                <cveUrlModified>http://internal-mirror.mycorp.com/nvdeve-1.1-modified.json.gz‹/cveUrlModified>
+                <cveUrlBase›http://internal-mirror.mycorp.com/nvdeve-1.1-%d.json.g2‹/cveUrlBase>
+
+                <suppressionFiles>
+                               <suppressionFiles>http://example.org/suppression.xm1‹/suppressionFile>
+                <suppressionFile›project-suppression.xml</suppressionFile>
+                
+                </suppressionFiles>
+                -->
+
+            </configuration>
         </plugin>
+
 
         </plugins>
     </build>
