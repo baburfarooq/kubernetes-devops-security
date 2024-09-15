@@ -36,11 +36,13 @@ pipeline {
     }
 }
 
-    stage('SonarQube SAST') {
-      steps {
-          sh "mvn sonar:sonar -Dsonar.projectKey=numeric-application -Dsonar.host.url=http://devsecops-demo.centralus.cloudapp.azure.com:9000 -Dsonar.login=sqb_257a2d9c3a526bec5df546ab486eddd827ae84ce"
-      } 
-    }
+    stage('SonarQube Analysis') {
+      def mvn = tool 'Default Maven';
+        withSonarQubeEnv() {
+          sh "${mvn}/bin/mvn clean verify sonar:sonar -Dsonar.projectKey=numeric-application -Dsonar.projectName='numeric-application'"
+        }
+      }
+}
 
 
 
