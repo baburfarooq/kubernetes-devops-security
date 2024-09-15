@@ -75,10 +75,18 @@
             </plugin>
             
   <!-- Dependency Check Plugin -->
-    <plugin>
+<plugin>
     <groupId>org.owasp</groupId>
     <artifactId>dependency-check-maven</artifactId>
     <version>6.1.6</version>
+    <executions>
+        <execution>
+            <id>check</id>
+            <goals>
+                <goal>check</goal>
+            </goals>
+        </execution>
+    </executions>
     <configuration>
         <format>ALL</format>
         <failBuildOnCVSS>5</failBuildOnCVSS>
@@ -98,7 +106,7 @@
         -->
 
     </configuration>
-    </plugin>
+</plugin>
 
 
         </plugins>
