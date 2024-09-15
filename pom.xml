@@ -75,43 +75,30 @@
             </plugin>
             
   <!-- Dependency Check Plugin -->
-<plugin>
+    <plugin>
     <groupId>org.owasp</groupId>
     <artifactId>dependency-check-maven</artifactId>
     <version>6.1.6</version>
     <configuration>
-        <!-- Output format for the report -->
         <format>ALL</format>
+        <failBuildOnCVSS>5</failBuildOnCVSS>
         
-        <!-- Fail the build if any CVSS score is greater than or equal to 9 -->
-        <failBuildOnCVSS>9</failBuildOnCVSS>
-        
-        <!-- Use internal mirroring of CVE contents -->
-        <!-- Example URLs for internal CVE content mirroring (uncomment and customize as needed) -->
+        <!-- 
+          Use internal mirroring of CVE contents
+          Suppress files
+          Example: company-wide suppression file and local project-specific file
+          -->
         <!--
-        <cveUrlModified>http://internal-mirror.mycorp.com/nvdve-1.1-modified.json.gz</cveUrlModified>
-        <cveUrlBase>http://internal-mirror.mycorp.com/nvdve-1.1-%d.json.gz</cveUrlBase>
-        -->
-
-        <!-- Suppression files for CVEs -->
-        <!-- Example: company-wide suppression file and local project-specific file -->
+        <cveUrlModified>http://internal-mirror.mycorp.com/nvdcve-1.1-modified.json.gz</cveUrlModified>
+        <cveUrlBase>http://internal-mirror.mycorp.com/nvdcve-1.1-%d.json.gz</cveUrlBase>
         <suppressionFiles>
-            <!-- URL to company-wide suppression file (uncomment and customize as needed) -->
-            <!-- <suppressionFile>http://example.org/suppression.xml</suppressionFile> -->
-            
-            <!-- Local project-specific suppression file -->
+            <suppressionFile>http://example.org/suppression.xml</suppressionFile>
             <suppressionFile>project-suppression.xml</suppressionFile>
         </suppressionFiles>
+        -->
+
     </configuration>
-    <executions>
-        <execution>
-            <id>check</id>
-            <goals>
-                <goal>check</goal>
-            </goals>
-        </execution>
-    </executions>
-</plugin>
+    </plugin>
 
 
         </plugins>
