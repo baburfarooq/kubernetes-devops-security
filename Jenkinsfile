@@ -1,6 +1,15 @@
 pipeline {
   agent any
 
+    environment {
+      deploymentName = "devsecops"
+      containerName = "devsecops-container"
+      serviceName = "devsecops-svc"
+      imageName = "baburfarooq82/numeric-app:${GIT COMMIT?"
+      applicationURL = "devsecops-demo.centralus.cloudapp.azure.com" 
+      applicationURI = "/increment/99"
+    }
+
   stages {
     stage('Build Artifact') {
       steps {
@@ -66,21 +75,37 @@ pipeline {
         }
       }
 
-    stage('Kubernetes Deployment - DEV') {
+    // stage('Kubernetes Deployment - DEV') {
+    //   steps {
+    //     withKubeConfig([credentialsId: 'kubeconfig']) {
+    //       // Ensure image tag substitution is correct
+    //       sh "sed -i 's#replace#baburfarooq82/numeric-app:${GIT_COMMIT}#g' k8s_deployment_service.yaml"
+          
+    //       // Apply the Kubernetes configuration
+    //       sh "kubectl apply -f k8s_deployment_service.yaml"
+          
+    //     }
+    //   }
+    // }
+
+    stage('K8S Deployment - DEV') {
       steps {
-        withKubeConfig([credentialsId: 'kubeconfig']) {
-          // Ensure image tag substitution is correct
-          sh "sed -i 's#replace#baburfarooq82/numeric-app:${GIT_COMMIT}#g' k8s_deployment_service.yaml"
-          
-          // Apply the Kubernetes configuration
-          sh "kubectl apply -f k8s_deployment_service.yaml"
-          
-        }
-      }
-
-
+        parallel(
+            "Deployment": {
+                withKubeConfig([credentialsId: 'kubeconfig']) {
+                    sh "bash k8s-deployment.sh"
+                }
+            },
+            "Rollout Status": {
+                withKubeConfig([credentialsId: 'kubeconfig']) {
+                    sh "bash k8s-deployment-rollout-status.sh"
+                }
+            }
+        )
     }
-  }
+}
+
+
   post { 
         always {
           junit 'target/surefire-reports/*.xml'
