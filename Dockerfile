@@ -12,6 +12,9 @@ RUN addgroup -S pipeline && adduser -S k8s-pipeline -G pipeline
 # Copy the JAR file into the container
 COPY ${JAR_FILE} /home/k8s-pipeline/app.jar
 
+# Change ownership of the JAR file to the non-root user
+RUN chown k8s-pipeline:pipeline /home/k8s-pipeline/app.jar
+
 # Switch to the non-root user
 USER k8s-pipeline
 
