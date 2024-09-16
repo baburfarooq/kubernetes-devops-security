@@ -17,19 +17,20 @@ secrets_env = [
 deny[msg] {    
     input[i].Cmd == "env"
     val := input[i].Value
-    contains(lower(val[_]), secrets_env[_])
+    some j
+    secrets_env[j] == lower(val)
     msg = sprintf("Line %d: Potential secret in ENV key found: %s", [i, val])
 }
 
 # Only use trusted base images
-#deny[msg] {
+# deny[msg] {
 #   input[i].Cmd == "from"
-#    val := split(input[i].Value[0], "/")
+#   val := split(input[i].Value[0], "/")
 #   count(val) > 1
 #   msg = sprintf("Line %d: use a trusted base image", [i])
-#}
+# }
 
-# Do not use 'latest' tag for base imagedeny[msg] {
+# Do not use 'latest' tag for base image
 deny[msg] {
     input[i].Cmd == "from"
     val := split(input[i].Value[0], ":")
@@ -64,7 +65,7 @@ deny[msg] {
 # Any user...
 any_user {
     input[i].Cmd == "user"
- }
+}
 
 deny[msg] {
     not any_user
@@ -79,10 +80,11 @@ forbidden_users = [
 ]
 
 deny[msg] {
-    command := "user"
+    input[i].Cmd == "user"
     users := [name | input[i].Cmd == "user"; name := input[i].Value]
     lastuser := users[count(users)-1]
-    contains(lower(lastuser[_]), forbidden_users[_])
+    some j
+    forbidden_users[j] == lower(lastuser)
     msg = sprintf("Line %d: Last USER directive (USER %s) is forbidden", [i, lastuser])
 }
 
@@ -101,6 +103,7 @@ multi_stage = true {
     val := concat(" ", input[i].Flags)
     contains(lower(val), "--from=")
 }
+
 deny[msg] {
     multi_stage == false
     msg = sprintf("You COPY, but do not appear to use multi-stage builds...", [])
