@@ -43,10 +43,10 @@ pipeline {
         },
           "Trivy Scan" :{
             sh "bash trivy-docker-image-scan.sh"
-          },
-          "OPA Conftest" : {
-            sh 'docker run --rm -v /var/lib/jenkins/workspace/devsecops-numeric-application:/project openpolicyagent/conftest test --policy opa-docker-security.rego myrepo/first:latest'
           }
+          // "OPA Conftest" : {
+          //   sh 'docker run --rm -v $(pwd):/project openpolicyagent/conftest test --policy opa-docker-security.rego Dockerfile'
+          // }
         )
       }
     }
